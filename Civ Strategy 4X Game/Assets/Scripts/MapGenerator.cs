@@ -19,7 +19,7 @@ public class MapGenerator : MonoBehaviour {
     void Start () {
         InitializeDictionaries();
 
-        GenerateMap(50, 50, 5);
+        //GenerateMap(50, 50, 5);
     }
 
     // Update is called once per frame
@@ -29,7 +29,9 @@ public class MapGenerator : MonoBehaviour {
 
     // Randomly generate a new map of the given dimensions sizeX and sizeY
     //  - maxRiverCount is the maximum number of rivers that will be generated
-    void GenerateMap (int sizeX, int sizeY, int maxRiverCount) {
+    public void GenerateMap (int sizeX, int sizeY, int maxRiverCount) {
+        InitializeDictionaries();
+
         Game.gameVar.mapSize = new Vector2(sizeX, sizeY);
         int riverCount = 0;
 
@@ -112,9 +114,9 @@ public class MapGenerator : MonoBehaviour {
     }
 
     // Check if the tile located at the given x and y position is a water tile
-    bool IsWaterTile (int xPos, int yPos) {
+    public bool IsWaterTile (int posX, int posY) {
         for (int i = 0; i < waterTiles.Length; i++) {
-            Tile tempTile = (Tile)groundMap.GetTile(new Vector3Int(xPos, yPos, 0));
+            Tile tempTile = (Tile)groundMap.GetTile(new Vector3Int(posX, posY, 0));
 
             if (tempTile == waterTiles[i]) {
                 return true;
@@ -126,6 +128,10 @@ public class MapGenerator : MonoBehaviour {
 
     // Initialize keys and values for dictionaries
     void InitializeDictionaries () {
+        if (directionToInt.Count > 0) {
+            return;
+        }
+
         //For converting a direction vector into an integer
         directionToInt.Add(new Vector2Int(0, 1), 0);
         directionToInt.Add(new Vector2Int(1, 1), 1);
