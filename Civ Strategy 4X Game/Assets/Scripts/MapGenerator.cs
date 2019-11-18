@@ -9,6 +9,8 @@ public class MapGenerator : MonoBehaviour {
 	public Tilemap groundMap;
 	public Tilemap terrainMap;
 
+    public GameObject[] worldBorders;
+
 	public Tile[] landTiles;
     public Tile[] waterTiles;
 
@@ -60,6 +62,8 @@ public class MapGenerator : MonoBehaviour {
                 }
         	}
         }
+
+        SetWorldBorders(sizeX, sizeY);
     }
 
     // Generate a new river across the map starting at a given position
@@ -111,6 +115,25 @@ public class MapGenerator : MonoBehaviour {
                 nextTurn *= -1;
             }
         }
+    }
+
+    // Sets up the outer world boundaries which prevent the camera from straying too far from the map
+    void SetWorldBorders (int sizeX, int sizeY) {
+        // Upper left world border
+        worldBorders[0].transform.position = groundMap.GetCellCenterWorld(new Vector3Int((int)(sizeX / 2.0), sizeY + 1, 0));
+        worldBorders[0].transform.localScale = new Vector3(1, sizeX, 1);
+
+        // Upper right world border
+        worldBorders[1].transform.position = groundMap.GetCellCenterWorld(new Vector3Int(sizeX + 1, (int)(sizeY / 2.0), 0));
+        worldBorders[1].transform.localScale = new Vector3(1, sizeY, 1);
+
+        // Lower left world border
+        worldBorders[2].transform.position = groundMap.GetCellCenterWorld(new Vector3Int(-2, (int)(sizeY / 2.0), 0));
+        worldBorders[2].transform.localScale = new Vector3(1, sizeY, 1);
+
+        // Lower right world border
+        worldBorders[3].transform.position = groundMap.GetCellCenterWorld(new Vector3Int((int)(sizeX / 2.0), -2, 0));
+        worldBorders[3].transform.localScale = new Vector3(1, sizeX, 1);
     }
 
     // Check if the tile located at the given x and y position is a water tile

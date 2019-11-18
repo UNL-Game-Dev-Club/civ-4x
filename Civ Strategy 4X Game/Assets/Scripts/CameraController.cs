@@ -12,11 +12,11 @@ public class CameraController : MonoBehaviour {
     public Vector3Int selectedTilePos;
     public MobileUnit selectedUnit;
 
-	Rigidbody2D rb;
+	Rigidbody rb;
 
     // Start is called before the first frame update
     void Start () {
-        rb = GetComponent<Rigidbody2D>();
+        rb = GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
@@ -36,7 +36,7 @@ public class CameraController : MonoBehaviour {
         }
 
     	// Adjust the velocity of the camera based on user input
-    	rb.velocity = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")) * cameraSpeed;
+    	rb.velocity = new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), 0) * cameraSpeed;
 
     	MoveTileSelector();
     }

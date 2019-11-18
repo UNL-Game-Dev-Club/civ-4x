@@ -78,11 +78,11 @@ public static class Game {
     	}
 
     	if (currentPlayer.isHuman) {
-    		Camera.main.GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
+    		Camera.main.GetComponent<Rigidbody>().velocity = new Vector3(0, 0, 0);
     		Camera.main.transform.position = currentPlayer.cameraPosition;
     	}
     	else {
-    		
+
     	}
     }
 
