@@ -1369,6 +1369,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 9dee21b839b624e65b31e9940b0e3a8c, type: 2}
   waterTiles:
   - {fileID: 11400000, guid: 2c0045fddac3d46e49da313d5fee7da6, type: 2}
+  movementCosts: 01000000000000000000000002000000
 --- !u!4 &1619701347
 Transform:
   m_ObjectHideFlags: 0

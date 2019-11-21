@@ -14,6 +14,8 @@ public class MapGenerator : MonoBehaviour {
 	public Tile[] landTiles;
     public Tile[] waterTiles;
 
+    public int[] movementCosts;
+
     Dictionary<Vector2Int, int> directionToInt = new Dictionary<Vector2Int, int>();
     Dictionary<int, Vector2Int> intToDirection = new Dictionary<int, Vector2Int>();
 
@@ -90,8 +92,8 @@ public class MapGenerator : MonoBehaviour {
         position += direction;
 
         while ( Game.IsInMapBounds(new Vector3Int(position.x, position.y, 0)) && !IsWaterTile(position.x, position.y) ) {
-            groundMap.SetTile(new Vector3Int(position.x, position.y, 0), waterTiles[0]);
-            terrainMap.SetTile(new Vector3Int(position.x, position.y, 1), null);
+            terrainMap.SetTile(new Vector3Int(position.x, position.y, 1), waterTiles[0]);
+            groundMap.SetTile(new Vector3Int(position.x, position.y, 1), null);
 
             position += direction;
 
@@ -139,7 +141,7 @@ public class MapGenerator : MonoBehaviour {
     // Check if the tile located at the given x and y position is a water tile
     public bool IsWaterTile (int posX, int posY) {
         for (int i = 0; i < waterTiles.Length; i++) {
-            Tile tempTile = (Tile)groundMap.GetTile(new Vector3Int(posX, posY, 0));
+            Tile tempTile = (Tile)terrainMap.GetTile(new Vector3Int(posX, posY, 1));
 
             if (tempTile == waterTiles[i]) {
                 return true;
@@ -147,6 +149,17 @@ public class MapGenerator : MonoBehaviour {
         }
 
         return false;
+    }
+
+    // Get the number corresponding to a particular tile
+    public int GetTileNumber (Tile tile) {
+        for (int i = 0; i < landTiles.Length; i++) {
+            if (landTiles[i] == tile) {
+                return i;
+            }
+        }
+
+        return 0;
     }
 
     // Initialize keys and values for dictionaries
