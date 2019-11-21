@@ -32,6 +32,10 @@ public class MobileUnit : MonoBehaviour {
     		return false;
     	}
 
+        if (GetMovementCost(new Vector3Int(posX, posY, 0)) > remainingWalk) {
+            return false;
+        }
+
     	Tile terrainTile = (Tile)Game.gameVar.terrainMap.GetTile(new Vector3Int(posX, posY, 1));
 
     	if (!IsWalkable(new Vector3Int(posX, posY, 0))) {
@@ -72,8 +76,6 @@ public class MobileUnit : MonoBehaviour {
 
         Tile currentTile = (Tile)Game.gameVar.terrainMap.GetTile(new Vector3Int(position.x, position.y, 1));
         int tileNumber = Game.gameVar.mapGenerator.GetTileNumber(currentTile);
-
-        Debug.Log(tileNumber);
 
         if (Game.gameVar.mapGenerator.movementCosts[tileNumber] == 0) {
             return false;
