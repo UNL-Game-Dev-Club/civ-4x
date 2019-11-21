@@ -28,6 +28,10 @@ public class CameraController : MonoBehaviour {
         if (Input.GetMouseButtonDown(0)) {
             OnLeftClick();
         }
+
+        if (Input.GetKeyDown("return") || Input.GetKeyDown("enter")) {
+            Game.NextPlayerTurn();
+        }
     }
 
     void FixedUpdate () {

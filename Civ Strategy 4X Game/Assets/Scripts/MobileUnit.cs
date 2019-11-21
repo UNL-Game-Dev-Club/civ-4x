@@ -34,13 +34,13 @@ public class MobileUnit : MonoBehaviour {
 
     	Tile terrainTile = (Tile)Game.gameVar.terrainMap.GetTile(new Vector3Int(posX, posY, 1));
 
-    	if (Game.gameVar.mapGenerator.IsWaterTile(posX, posY) || terrainTile == Game.gameVar.mapGenerator.landTiles[1]) {
+    	if (!IsWalkable(new Vector3Int(posX, posY, 0))) {
     		return false;
     	}
 
     	newPosition = Game.gameVar.groundMap.GetCellCenterWorld(new Vector3Int(posX, posY, 0));
 
-    	remainingWalk -= 1;
+    	remainingWalk -= GetMovementCost(new Vector3Int(posX, posY, 0));
 
     	if (remainingWalk < 1) {
     		canMove = false;
@@ -63,4 +63,47 @@ public class MobileUnit : MonoBehaviour {
 
     	return false;
     }
+
+    // Check if the given tile is walkable
+    private bool IsWalkable (Vector3Int position) {
+        if (Game.gameVar.mapGenerator.IsWaterTile(position.x, position.y)) {
+            return false;
+        }
+
+        Tile currentTile = (Tile)Game.gameVar.terrainMap.GetTile(new Vector3Int(position.x, position.y, 1));
+        int tileNumber = Game.gameVar.mapGenerator.GetTileNumber(currentTile);
+
+        Debug.Log(tileNumber);
+
+        if (Game.gameVar.mapGenerator.movementCosts[tileNumber] == 0) {
+            return false;
+        }
+
+        return true;
+    }
+
+    // Returns the movement cost of the given tile
+    private int GetMovementCost (Vector3Int position) {
+        if (Game.gameVar.mapGenerator.IsWaterTile(position.x, position.y)) {
+            return 0;
+        }
+
+        Tile currentTile = (Tile)Game.gameVar.terrainMap.GetTile(new Vector3Int(position.x, position.y, 1));
+        int tileNumber = Game.gameVar.mapGenerator.GetTileNumber(currentTile);
+
+        return Game.gameVar.mapGenerator.movementCosts[tileNumber];
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
