@@ -12,6 +12,8 @@ public class CameraController : MonoBehaviour {
     public Vector3Int selectedTilePos;
     public MobileUnit selectedUnit;
 
+    public UnitMenu unitMenu;
+
 	Rigidbody rb;
 
     // Start is called before the first frame update
@@ -105,11 +107,37 @@ public class CameraController : MonoBehaviour {
         unitSelector.SetActive(true);
         unitSelector.transform.position = unit.transform.position;
 
+        Vector3Int unitPos = Game.gameVar.mainGrid.WorldToCell(unit.transform.position);
+
         if (unit.GetComponent<MobileUnit>().canMove) {
             moveSelector.SetActive(true);
+
+            for (int i = 0; i < 8; i++) {
+            	Vector2Int direction = Game.gameVar.mapGenerator.intToDirection[i];
+            	int moveCost = unit.GetComponent<MobileUnit>().GetMovementCost(new Vector3Int(unitPos.x + direction.x, unitPos.y + direction.y, 1));
+
+            	if (moveCost > 0 && moveCost < 4) {
+            		Game.gameVar.movementSprites[i].gameObject.SetActive(true);
+            		Game.gameVar.movementSprites[i].sprite = Game.gameVar.numberSprites[moveCost];
+
+            		if (moveCost > unit.GetComponent<MobileUnit>().remainingWalk) {
+            			Game.gameVar.movementSprites[i].color = new Color(1, 0, 0, 1);
+            		}
+            		else {
+            			Game.gameVar.movementSprites[i].color = new Color(1, 1, 1, 1);
+            		}
+            	}
+            	else {
+            		Game.gameVar.movementSprites[i].gameObject.SetActive(false);
+            	}
+            }
         }
 
         selectedUnit = unit.GetComponent<MobileUnit>();
+
+        unitMenu.gameObject.SetActive(true);
+        unitMenu.currentUnit = selectedUnit;
+        unitMenu.LoadUnitData();
     }
 
     // Unselect the currently selected unit
@@ -117,6 +145,7 @@ public class CameraController : MonoBehaviour {
         selectedUnit = null;
         unitSelector.SetActive(false);
         moveSelector.SetActive(false);
+        unitMenu.gameObject.SetActive(false);
     }
 }
 

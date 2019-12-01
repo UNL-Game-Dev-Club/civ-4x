@@ -6,6 +6,13 @@ public static class Game {
     
     public static GameVar gameVar;
 
+    // An enum for specifying which type of tile a GameTile is
+    public enum TileType {
+    	Ground,
+    	Terrain,
+    	Water
+    }
+
     // Check if the x and y coordinates of a Vector3Int are within the boundaries of the map
     public static bool IsInMapBounds (Vector3Int position) {
     	return (position.x >= 0 && position.x < gameVar.mapSize.x && position.y >= 0 && position.y < gameVar.mapSize.y);
@@ -21,34 +28,39 @@ public static class Game {
     		GameObject newObject = (GameObject)Object.Instantiate(gameVar.humanPlayer, new Vector3(0, 0, 0), new Quaternion(0, 0, 0, 0));
     		Player newPlayer = newObject.GetComponent<Player>();
 
-    		Vector3Int startingPosition = new Vector3Int(Random.Range(5, mapSizeX - 5), Random.Range(5, mapSizeY - 5), 0);
+    		newPlayer.startingPosition = new Vector3Int(Random.Range(5, mapSizeX - 5), Random.Range(5, mapSizeY - 5), 0);
 
-    		newPlayer.playerNumber = i;
-
-    		newPlayer.playerColor = gameVar.playerColors[i];
-
-    		newPlayer.cameraPosition = gameVar.groundMap.GetCellCenterWorld(startingPosition);
+    		newPlayer.cameraPosition = gameVar.groundMap.GetCellCenterWorld(newPlayer.startingPosition);
     		newPlayer.cameraPosition = new Vector3(newPlayer.cameraPosition.x, newPlayer.cameraPosition.y, -10);
-
-    		newPlayer.GenerateUnit(gameVar.units[0], startingPosition.x, startingPosition.y);
 
     		gameVar.players.Add(newPlayer);
     	}
 
     	// Create each computer player and add them to the list of players
-    	for (int i = gameVar.numberOfPlayers; i < gameVar.numberOfPlayers + gameVar.numberOfComputers; i++) {
+    	for (int i = 0; i < gameVar.numberOfComputers; i++) {
     		GameObject newObject = (GameObject)Object.Instantiate(gameVar.computerPlayer, new Vector3(0, 0, 0), new Quaternion(0, 0, 0, 0));
     		Player newPlayer = newObject.GetComponent<Player>();
 
-    		Vector3Int startingPosition = new Vector3Int(Random.Range(5, mapSizeX - 5), Random.Range(5, mapSizeY - 5), 0);
-
-    		newPlayer.playerNumber = i + gameVar.numberOfPlayers;
-
-    		newPlayer.playerColor = gameVar.playerColors[i + gameVar.numberOfPlayers];
-
-    		newPlayer.GenerateUnit(gameVar.units[0], startingPosition.x, startingPosition.y);
+    		newPlayer.startingPosition = new Vector3Int(Random.Range(5, mapSizeX - 5), Random.Range(5, mapSizeY - 5), 0);
 
     		gameVar.players.Add(newPlayer);
+    	}
+
+    	// Finish initialization of the players
+    	for (int i = 0; i < gameVar.players.Count; i++) {
+    		Player newPlayer = gameVar.players[i];
+
+    		newPlayer.playerNumber = i;
+
+    		newPlayer.playerColor = gameVar.playerColors[i];
+
+    		newPlayer.GenerateUnit(gameVar.units[0], newPlayer.startingPosition.x, newPlayer.startingPosition.y);
+
+    		// Starting resources
+    		newPlayer.gold = 1000;
+    		newPlayer.iron = 0;
+    		newPlayer.wood = 0;
+    		newPlayer.food = 0;
     	}
 
     	StartPlayerTurn(0);

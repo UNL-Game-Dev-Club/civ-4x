@@ -11,13 +11,15 @@ public class MapGenerator : MonoBehaviour {
 
     public GameObject[] worldBorders;
 
-	public Tile[] landTiles;
-    public Tile[] waterTiles;
+	// public Tile[] landTiles;
+    // public Tile[] waterTiles;
+
+    public GameTile[] gameTiles;
 
     public int[] movementCosts;
 
-    Dictionary<Vector2Int, int> directionToInt = new Dictionary<Vector2Int, int>();
-    Dictionary<int, Vector2Int> intToDirection = new Dictionary<int, Vector2Int>();
+    public Dictionary<Vector2Int, int> directionToInt = new Dictionary<Vector2Int, int>();
+    public Dictionary<int, Vector2Int> intToDirection = new Dictionary<int, Vector2Int>();
 
     // Start is called before the first frame update
     void Start () {
@@ -44,18 +46,32 @@ public class MapGenerator : MonoBehaviour {
                 if (x >= 0 && x < sizeX && y >= 0 && y < sizeY) {
                     if (!IsWaterTile(x, y)) {
                         // put the ground layer on the bottom layer (z = 0)
-                        groundMap.SetTile(new Vector3Int(x, y, 0), landTiles[0]);
+                        groundMap.SetTile(new Vector3Int(x, y, 0), gameTiles[0].tile);
 
-                        int nextTile = Random.Range(0, landTiles.Length);
+                        int randomRange = 0;
+                        for (int i = 2; i < gameTiles.Length; i++) {
+                        	randomRange += (int)((float)gameTiles[i].spawnRate * 2f);
+                        }
 
-                        // put the terrain on top(z = 1)
+                        int randomNumber = Random.Range(0, randomRange);
+                        int nextTile = 0;
+
+                        for (int i = 2; i < gameTiles.Length; i++) {
+                        	if (randomNumber < gameTiles[i].spawnRate && nextTile == 0) {
+                        		nextTile = i;
+                        	}
+                        	else {
+                        		randomNumber -= gameTiles[i].spawnRate;
+                        	}
+                        }
+
                         if (nextTile > 1) {
-                            terrainMap.SetTile(new Vector3Int(x, y, 1), landTiles[nextTile]);
+                            SetGameTile(new Vector3Int(x, y, 1), gameTiles[nextTile]);
                         }
                     }
                 }
                 else {
-                    terrainMap.SetTile(new Vector3Int(x, y, 0), landTiles[1]);
+                    SetGameTile(new Vector3Int(x, y, 1), gameTiles[1]);
 
                     if (Random.Range(0, 50) == 17 && riverCount < maxRiverCount) {
                         GenerateRiver(x, y);
@@ -64,6 +80,8 @@ public class MapGenerator : MonoBehaviour {
                 }
         	}
         }
+
+        //GenerateResources
 
         SetWorldBorders(sizeX, sizeY);
     }
@@ -92,12 +110,14 @@ public class MapGenerator : MonoBehaviour {
         position += direction;
 
         while ( Game.IsInMapBounds(new Vector3Int(position.x, position.y, 0)) && !IsWaterTile(position.x, position.y) ) {
-            terrainMap.SetTile(new Vector3Int(position.x, position.y, 1), waterTiles[0]);
-            groundMap.SetTile(new Vector3Int(position.x, position.y, 1), null);
+        	SetGameTile(new Vector3Int(position.x, position.y, 1), gameTiles[2]);
+        	groundMap.SetTile(new Vector3Int(position.x, position.y, 1), null);
 
+            //terrainMap.SetTile(new Vector3Int(position.x, position.y, 1), waterTiles[0]);
+            
             position += direction;
 
-            //Random chance of the river either continuing straight or turning slightly each time a new part of it is generated
+            // Random chance of the river either continuing straight or turning slightly each time a new part of it is generated
             if (Random.Range(0, 2) == 1) {
                 int tempInt = directionToInt[direction] + nextTurn;
 
@@ -140,26 +160,38 @@ public class MapGenerator : MonoBehaviour {
 
     // Check if the tile located at the given x and y position is a water tile
     public bool IsWaterTile (int posX, int posY) {
-        for (int i = 0; i < waterTiles.Length; i++) {
-            Tile tempTile = (Tile)terrainMap.GetTile(new Vector3Int(posX, posY, 1));
+        Tile tempTile = (Tile)terrainMap.GetTile(new Vector3Int(posX, posY, 1));
+        GameTile gameTile = gameTiles[GetTileNumber(tempTile)];
 
-            if (tempTile == waterTiles[i]) {
-                return true;
-            }
-        }
-
-        return false;
+        return (gameTile.type == Game.TileType.Water);
     }
 
     // Get the number corresponding to a particular tile
     public int GetTileNumber (Tile tile) {
-        for (int i = 0; i < landTiles.Length; i++) {
-            if (landTiles[i] == tile) {
+        for (int i = 0; i < gameTiles.Length; i++) {
+            if (gameTiles[i].tile == tile) {
                 return i;
             }
         }
 
         return 0;
+    }
+
+    // Places the tile of the given GameTile on the correct tilemap and at the given coordinates
+    public void SetGameTile (Vector3Int pos, GameTile gameTile) {
+    	switch (gameTile.type) {
+    		case Game.TileType.Ground:
+    			groundMap.SetTile(new Vector3Int(pos.x, pos.y, 0), gameTile.tile);
+    		break;
+
+    		case Game.TileType.Terrain:
+    			terrainMap.SetTile(new Vector3Int(pos.x, pos.y, 1), gameTile.tile);
+    		break;
+
+    		case Game.TileType.Water:
+    			terrainMap.SetTile(new Vector3Int(pos.x, pos.y, 1), gameTile.tile);
+    		break;
+    	}
     }
 
     // Initialize keys and values for dictionaries

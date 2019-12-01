@@ -10,9 +10,14 @@ public class Player : MonoBehaviour {
 	// Values set during gameplay
 	public int playerNumber;
 	public Color playerColor;
-
 	public Vector3 cameraPosition;
+	public Vector3Int startingPosition;
 
+	// Resource Variables
+	public int gold;
+	public int iron;
+	public int wood;
+	public int food;
 
 	// Objects defined during gameplay
 	public List<MobileUnit> ownedUnits = new List<MobileUnit>();

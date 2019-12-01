@@ -5,10 +5,19 @@ using UnityEngine.Tilemaps;
 
 public class MobileUnit : MonoBehaviour {
 
+    // Type of unit
 	public string type;
-	public int healthPoints;
+	
+    // Health Variables
+    public int healthPoints;
+    public int maxHealth;
+
+    // Variables for other stats
+    public int attackPower;
+    public int attackRange;
 	public int walkDistance;
 
+    // Values set during gameplay
 	public int teamNumber;
 	public bool canMove;
 	public int remainingWalk;
@@ -77,7 +86,7 @@ public class MobileUnit : MonoBehaviour {
         Tile currentTile = (Tile)Game.gameVar.terrainMap.GetTile(new Vector3Int(position.x, position.y, 1));
         int tileNumber = Game.gameVar.mapGenerator.GetTileNumber(currentTile);
 
-        if (Game.gameVar.mapGenerator.movementCosts[tileNumber] == 0) {
+        if (Game.gameVar.mapGenerator.gameTiles[tileNumber].moveCost == 0) {
             return false;
         }
 
@@ -85,7 +94,7 @@ public class MobileUnit : MonoBehaviour {
     }
 
     // Returns the movement cost of the given tile
-    private int GetMovementCost (Vector3Int position) {
+    public int GetMovementCost (Vector3Int position) {
         if (Game.gameVar.mapGenerator.IsWaterTile(position.x, position.y)) {
             return 0;
         }
@@ -93,7 +102,7 @@ public class MobileUnit : MonoBehaviour {
         Tile currentTile = (Tile)Game.gameVar.terrainMap.GetTile(new Vector3Int(position.x, position.y, 1));
         int tileNumber = Game.gameVar.mapGenerator.GetTileNumber(currentTile);
 
-        return Game.gameVar.mapGenerator.movementCosts[tileNumber];
+        return Game.gameVar.mapGenerator.gameTiles[tileNumber].moveCost;
     }
 }
 

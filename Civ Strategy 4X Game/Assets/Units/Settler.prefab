@@ -97,6 +97,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: Settler
   healthPoints: 100
+  maxHealth: 100
+  attackPower: 1
+  attackRange: 1
   walkDistance: 2
   teamNumber: 0
   canMove: 0
