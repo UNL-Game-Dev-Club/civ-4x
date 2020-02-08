@@ -17,9 +17,12 @@ public class GameVar : MonoBehaviour {
 	public Tilemap colorMap;
     
 	public GameTile[] buildingTiles;
+    public GameTile[] wallTiles;
 
     public GameObject humanPlayer;
     public GameObject computerPlayer;
+
+    public GameObject controlMenu;
 
     public MapGenerator mapGenerator;
 
@@ -59,6 +62,10 @@ public class GameVar : MonoBehaviour {
         woodText.text = "" + GetCurrentPlayer().wood + " (+" + GetCurrentPlayer().woodProfit + ")";
      	foodText.text = "" + GetCurrentPlayer().food + " (+" + GetCurrentPlayer().foodProfit + ")";
      	stoneText.text = "" + GetCurrentPlayer().stone + " (+" + GetCurrentPlayer().stoneProfit + ")";
+
+        if (Input.GetKeyDown("space")) {
+            controlMenu.SetActive(false);
+        }
     }
 
     // Returns the player whose turn it currently is

@@ -298,12 +298,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 1024, y: 768}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
+  m_MatchWidthOrHeight: 1
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
@@ -343,6 +343,7 @@ RectTransform:
   - {fileID: 444778448}
   - {fileID: 1319278637}
   - {fileID: 1159756437}
+  - {fileID: 1108018780}
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1840,6 +1841,103 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 444778447}
+  m_CullTransparentMesh: 0
+--- !u!1 &485457714
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 485457715}
+  - component: {fileID: 485457717}
+  - component: {fileID: 485457716}
+  m_Layer: 5
+  m_Name: Controls
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &485457715
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 485457714}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1108018780}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 0, y: -5}
+  m_SizeDelta: {x: 450, y: 30}
+  m_Pivot: {x: 0.5, y: 1}
+--- !u!114 &485457716
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 485457714}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FontData:
+    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_FontSize: 20
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 0
+    m_MaxSize: 49
+    m_Alignment: 1
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 1
+    m_LineSpacing: 1
+  m_Text: 'Instructions:
+
+    WASD / arrows = move camera.
+
+
+    ENTER = end turn
+
+
+    Click on a character to select it and open its character menu.
+
+
+    A selected character can be moved by clicking numbered tiles.
+
+
+    Builder can chop trees and construct buildings.
+
+
+    This build is a 2 player game: Blue VS Red
+
+
+    Press SPACE to hide these instructions'
+--- !u!222 &485457717
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 485457714}
   m_CullTransparentMesh: 0
 --- !u!1 &487301384
 GameObject:
@@ -3770,6 +3868,77 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1072778885}
   m_CullTransparentMesh: 0
+--- !u!1 &1108018779
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1108018780}
+  - component: {fileID: 1108018782}
+  - component: {fileID: 1108018781}
+  m_Layer: 5
+  m_Name: Controls
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!224 &1108018780
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1108018779}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 485457715}
+  m_Father: {fileID: 20560843}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 500, y: 400}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1108018781
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1108018779}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1344c3c82d62a2a41a3576d8abb8e3ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.3962264, g: 0.3962264, b: 0.3962264, a: 1}
+  m_RaycastTarget: 0
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Texture: {fileID: 0}
+  m_UVRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+--- !u!222 &1108018782
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1108018779}
+  m_CullTransparentMesh: 0
 --- !u!1 &1113611270
 GameObject:
   m_ObjectHideFlags: 0
@@ -4158,6 +4327,8 @@ MonoBehaviour:
   foodIcon: {fileID: 21300000, guid: 9998abaefeb18430ea82c31710fc9628, type: 3}
   stoneIcon: {fileID: 21300000, guid: 475e16e2d84c94bb9ae1f88a67d9be3c, type: 3}
   currentUnit: {fileID: 0}
+  buildMode: 0
+  wallMode: 1
 --- !u!222 &1159756439
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -5462,7 +5633,8 @@ MonoBehaviour:
   - {fileID: 1882005423}
   - {fileID: 948085515}
   gameTiles:
-  - tile: {fileID: 11400000, guid: 99ac20a7e05d746d38932f028ed34a9a, type: 2}
+  - tileName: Grass
+    tile: {fileID: 11400000, guid: 99ac20a7e05d746d38932f028ed34a9a, type: 2}
     colorTile: {fileID: 0}
     moveCost: 1
     spawnRate: 0
@@ -5475,7 +5647,8 @@ MonoBehaviour:
     buildingName: 
     buildingIcon: {fileID: 0}
     buildingTiles: []
-  - tile: {fileID: 11400000, guid: db33aac53630c4c18816fe0f01505394, type: 2}
+  - tileName: World Border
+    tile: {fileID: 11400000, guid: db33aac53630c4c18816fe0f01505394, type: 2}
     colorTile: {fileID: 0}
     moveCost: 0
     spawnRate: 0
@@ -5488,7 +5661,8 @@ MonoBehaviour:
     buildingName: 
     buildingIcon: {fileID: 0}
     buildingTiles: []
-  - tile: {fileID: 11400000, guid: 2c0045fddac3d46e49da313d5fee7da6, type: 2}
+  - tileName: Water
+    tile: {fileID: 11400000, guid: 2c0045fddac3d46e49da313d5fee7da6, type: 2}
     colorTile: {fileID: 0}
     moveCost: 0
     spawnRate: 0
@@ -5501,7 +5675,8 @@ MonoBehaviour:
     buildingName: 
     buildingIcon: {fileID: 0}
     buildingTiles: []
-  - tile: {fileID: 11400000, guid: 9dee21b839b624e65b31e9940b0e3a8c, type: 2}
+  - tileName: Trees
+    tile: {fileID: 11400000, guid: 9dee21b839b624e65b31e9940b0e3a8c, type: 2}
     colorTile: {fileID: 0}
     moveCost: 2
     spawnRate: 50
@@ -5514,7 +5689,8 @@ MonoBehaviour:
     buildingName: 
     buildingIcon: {fileID: 0}
     buildingTiles: []
-  - tile: {fileID: 11400000, guid: 5b82f0c06142149e5bf74e425c849c43, type: 2}
+  - tileName: Wheat
+    tile: {fileID: 11400000, guid: 5b82f0c06142149e5bf74e425c849c43, type: 2}
     colorTile: {fileID: 0}
     moveCost: 2
     spawnRate: 10
@@ -5527,7 +5703,8 @@ MonoBehaviour:
     buildingName: 
     buildingIcon: {fileID: 0}
     buildingTiles: []
-  - tile: {fileID: 11400000, guid: a241368516d5d43ec8fd247ceb5f125e, type: 2}
+  - tileName: Mountain
+    tile: {fileID: 11400000, guid: a241368516d5d43ec8fd247ceb5f125e, type: 2}
     colorTile: {fileID: 0}
     moveCost: 0
     spawnRate: 30
@@ -5540,7 +5717,8 @@ MonoBehaviour:
     buildingName: 
     buildingIcon: {fileID: 0}
     buildingTiles: []
-  - tile: {fileID: 11400000, guid: 761fa77301cd844e6bb621d344196ff6, type: 2}
+  - tileName: Iron Tile
+    tile: {fileID: 11400000, guid: 761fa77301cd844e6bb621d344196ff6, type: 2}
     colorTile: {fileID: 0}
     moveCost: 0
     spawnRate: 3
@@ -5553,7 +5731,8 @@ MonoBehaviour:
     buildingName: 
     buildingIcon: {fileID: 0}
     buildingTiles: []
-  - tile: {fileID: 11400000, guid: a654d3e464d164755abe21c457de8ec4, type: 2}
+  - tileName: Gold Tile
+    tile: {fileID: 11400000, guid: a654d3e464d164755abe21c457de8ec4, type: 2}
     colorTile: {fileID: 0}
     moveCost: 0
     spawnRate: 2
@@ -5566,7 +5745,6 @@ MonoBehaviour:
     buildingName: 
     buildingIcon: {fileID: 0}
     buildingTiles: []
-  movementCosts: 01000000000000000000000002000000020000000000000000000000
 --- !u!4 &1619701347
 Transform:
   m_ObjectHideFlags: 0
@@ -5600,7 +5778,8 @@ MonoBehaviour:
   terrainMap: {fileID: 199369558}
   colorMap: {fileID: 1622309380}
   buildingTiles:
-  - tile: {fileID: 11400000, guid: 1d32f866bea3b4339b640ec3a457c473, type: 2}
+  - tileName: Castle
+    tile: {fileID: 11400000, guid: 1d32f866bea3b4339b640ec3a457c473, type: 2}
     colorTile: {fileID: 11400000, guid: 231774e98e9ef47a8a64139975693348, type: 2}
     moveCost: 1
     spawnRate: 0
@@ -5614,7 +5793,8 @@ MonoBehaviour:
     buildingIcon: {fileID: 21300000, guid: 0c951e4ab6a824e0487bb172f7165c47, type: 3}
     buildingTiles:
     - {fileID: 0}
-  - tile: {fileID: 11400000, guid: a10c7b99fdbdf43539a746e87e6a9f8a, type: 2}
+  - tileName: Farm
+    tile: {fileID: 11400000, guid: a10c7b99fdbdf43539a746e87e6a9f8a, type: 2}
     colorTile: {fileID: 11400000, guid: fc9b6abd3641449e6b3f8b47ca3a7279, type: 2}
     moveCost: 1
     spawnRate: 0
@@ -5628,7 +5808,8 @@ MonoBehaviour:
     buildingIcon: {fileID: 21300000, guid: 01d0e182ac04c458a8334b6ab60cccf1, type: 3}
     buildingTiles:
     - {fileID: 11400000, guid: 5b82f0c06142149e5bf74e425c849c43, type: 2}
-  - tile: {fileID: 11400000, guid: a729636b930954dec858464d5da48c03, type: 2}
+  - tileName: Mine
+    tile: {fileID: 11400000, guid: a729636b930954dec858464d5da48c03, type: 2}
     colorTile: {fileID: 0}
     moveCost: 1
     spawnRate: 0
@@ -5643,7 +5824,8 @@ MonoBehaviour:
     buildingTiles:
     - {fileID: 11400000, guid: a654d3e464d164755abe21c457de8ec4, type: 2}
     - {fileID: 11400000, guid: 761fa77301cd844e6bb621d344196ff6, type: 2}
-  - tile: {fileID: 11400000, guid: e32773166897a4f14aa1ffc7501d681e, type: 2}
+  - tileName: Lumber Yard
+    tile: {fileID: 11400000, guid: e32773166897a4f14aa1ffc7501d681e, type: 2}
     colorTile: {fileID: 11400000, guid: 19f2ccd77f4314b12ae94954c764676d, type: 2}
     moveCost: 1
     spawnRate: 0
@@ -5657,7 +5839,8 @@ MonoBehaviour:
     buildingIcon: {fileID: 0}
     buildingTiles:
     - {fileID: 11400000, guid: 9dee21b839b624e65b31e9940b0e3a8c, type: 2}
-  - tile: {fileID: 11400000, guid: d6d258de927bf48ce87718bc118087f4, type: 2}
+  - tileName: Stone Mine
+    tile: {fileID: 11400000, guid: d6d258de927bf48ce87718bc118087f4, type: 2}
     colorTile: {fileID: 11400000, guid: 8d35bb369384549c0b8790e2feb4d13c, type: 2}
     moveCost: 1
     spawnRate: 0
@@ -5671,7 +5854,8 @@ MonoBehaviour:
     buildingIcon: {fileID: 0}
     buildingTiles:
     - {fileID: 11400000, guid: a241368516d5d43ec8fd247ceb5f125e, type: 2}
-  - tile: {fileID: 11400000, guid: 1ddd5f5b5df094677b8435bfd082cc80, type: 2}
+  - tileName: Mountain Fortress
+    tile: {fileID: 11400000, guid: 1ddd5f5b5df094677b8435bfd082cc80, type: 2}
     colorTile: {fileID: 11400000, guid: 8518cff9876544f179701141dfb47e1e, type: 2}
     moveCost: 1
     spawnRate: 0
@@ -5685,10 +5869,237 @@ MonoBehaviour:
     buildingIcon: {fileID: 0}
     buildingTiles:
     - {fileID: 11400000, guid: a241368516d5d43ec8fd247ceb5f125e, type: 2}
+  - tileName: Walls
+    tile: {fileID: 11400000, guid: 16cef0ba2d07e43a090ab4481ef7d674, type: 2}
+    colorTile: {fileID: 11400000, guid: 16cef0ba2d07e43a090ab4481ef7d674, type: 2}
+    moveCost: 0
+    spawnRate: 0
+    type: 3
+    goldCost: 0
+    ironCost: 0
+    woodCost: 0
+    foodCost: 0
+    stoneCost: 100
+    buildingName: Walls
+    buildingIcon: {fileID: 21300000, guid: 4893c263dfd334109bf20a21cb075b0a, type: 3}
+    buildingTiles:
+    - {fileID: 11400000, guid: a241368516d5d43ec8fd247ceb5f125e, type: 2}
+  wallTiles:
+  - tileName: Top Left
+    tile: {fileID: 11400000, guid: ba50aeaf619134446b5a8bd4a4d3fd37, type: 2}
+    colorTile: {fileID: 0}
+    moveCost: 0
+    spawnRate: 0
+    type: 3
+    goldCost: 0
+    ironCost: 0
+    woodCost: 0
+    foodCost: 0
+    stoneCost: 100
+    buildingName: Wall
+    buildingIcon: {fileID: 0}
+    buildingTiles: []
+  - tileName: Top
+    tile: {fileID: 11400000, guid: 7d37d4d40aea947cc8a1b8540d2d79a7, type: 2}
+    colorTile: {fileID: 0}
+    moveCost: 0
+    spawnRate: 0
+    type: 3
+    goldCost: 0
+    ironCost: 0
+    woodCost: 0
+    foodCost: 0
+    stoneCost: 100
+    buildingName: Wall
+    buildingIcon: {fileID: 0}
+    buildingTiles: []
+  - tileName: Top Right
+    tile: {fileID: 11400000, guid: 1652ae17101bf4a88a847bd0f3f17a1a, type: 2}
+    colorTile: {fileID: 0}
+    moveCost: 0
+    spawnRate: 0
+    type: 3
+    goldCost: 0
+    ironCost: 0
+    woodCost: 0
+    foodCost: 0
+    stoneCost: 100
+    buildingName: Wall
+    buildingIcon: {fileID: 0}
+    buildingTiles: []
+  - tileName: Left
+    tile: {fileID: 11400000, guid: ed2e8af16c02a44748ca00c9a9d1b98f, type: 2}
+    colorTile: {fileID: 0}
+    moveCost: 0
+    spawnRate: 0
+    type: 3
+    goldCost: 0
+    ironCost: 0
+    woodCost: 0
+    foodCost: 0
+    stoneCost: 100
+    buildingName: Wall
+    buildingIcon: {fileID: 0}
+    buildingTiles: []
+  - tileName: Middle
+    tile: {fileID: 11400000, guid: 42837656698674410b8d2c08b418bc30, type: 2}
+    colorTile: {fileID: 0}
+    moveCost: 0
+    spawnRate: 0
+    type: 3
+    goldCost: 0
+    ironCost: 0
+    woodCost: 0
+    foodCost: 0
+    stoneCost: 100
+    buildingName: Wall
+    buildingIcon: {fileID: 0}
+    buildingTiles: []
+  - tileName: Right
+    tile: {fileID: 11400000, guid: 54eef1265b645469cb621c9056d1a7b4, type: 2}
+    colorTile: {fileID: 0}
+    moveCost: 0
+    spawnRate: 0
+    type: 3
+    goldCost: 0
+    ironCost: 0
+    woodCost: 0
+    foodCost: 0
+    stoneCost: 100
+    buildingName: Wall
+    buildingIcon: {fileID: 0}
+    buildingTiles: []
+  - tileName: Bottom Left
+    tile: {fileID: 11400000, guid: d62d9675528d942d9ac6cf565201a1ed, type: 2}
+    colorTile: {fileID: 0}
+    moveCost: 0
+    spawnRate: 0
+    type: 3
+    goldCost: 0
+    ironCost: 0
+    woodCost: 0
+    foodCost: 0
+    stoneCost: 100
+    buildingName: Wall
+    buildingIcon: {fileID: 0}
+    buildingTiles: []
+  - tileName: Bottom
+    tile: {fileID: 11400000, guid: 6e1bf4f2ba6e548bfa434cb063b7906b, type: 2}
+    colorTile: {fileID: 0}
+    moveCost: 0
+    spawnRate: 0
+    type: 3
+    goldCost: 0
+    ironCost: 0
+    woodCost: 0
+    foodCost: 0
+    stoneCost: 100
+    buildingName: Wall
+    buildingIcon: {fileID: 0}
+    buildingTiles: []
+  - tileName: Bottom Right
+    tile: {fileID: 11400000, guid: b60291204e32d4d4caaad0e95c59eb7b, type: 2}
+    colorTile: {fileID: 0}
+    moveCost: 0
+    spawnRate: 0
+    type: 3
+    goldCost: 0
+    ironCost: 0
+    woodCost: 0
+    foodCost: 0
+    stoneCost: 100
+    buildingName: Wall
+    buildingIcon: {fileID: 0}
+    buildingTiles: []
+  - tileName: Top End
+    tile: {fileID: 11400000, guid: fc325c1c6c4fc4ad1b7fcb90c60eee0a, type: 2}
+    colorTile: {fileID: 0}
+    moveCost: 0
+    spawnRate: 0
+    type: 3
+    goldCost: 0
+    ironCost: 0
+    woodCost: 0
+    foodCost: 0
+    stoneCost: 100
+    buildingName: Wall
+    buildingIcon: {fileID: 0}
+    buildingTiles: []
+  - tileName: Bottom End
+    tile: {fileID: 11400000, guid: 47420de8ea9824ec798d4c3863cba171, type: 2}
+    colorTile: {fileID: 0}
+    moveCost: 0
+    spawnRate: 0
+    type: 3
+    goldCost: 0
+    ironCost: 0
+    woodCost: 0
+    foodCost: 0
+    stoneCost: 100
+    buildingName: Wall
+    buildingIcon: {fileID: 0}
+    buildingTiles: []
+  - tileName: Left End
+    tile: {fileID: 11400000, guid: e969755f9ec4742a688b90250f2ce3d4, type: 2}
+    colorTile: {fileID: 0}
+    moveCost: 0
+    spawnRate: 0
+    type: 3
+    goldCost: 0
+    ironCost: 0
+    woodCost: 0
+    foodCost: 0
+    stoneCost: 100
+    buildingName: Wall
+    buildingIcon: {fileID: 0}
+    buildingTiles: []
+  - tileName: Right End
+    tile: {fileID: 11400000, guid: 227becb9a4b03490c8ae97329eb73296, type: 2}
+    colorTile: {fileID: 0}
+    moveCost: 0
+    spawnRate: 0
+    type: 3
+    goldCost: 0
+    ironCost: 0
+    woodCost: 0
+    foodCost: 0
+    stoneCost: 100
+    buildingName: Wall
+    buildingIcon: {fileID: 0}
+    buildingTiles: []
+  - tileName: Top and Bottom
+    tile: {fileID: 11400000, guid: 16cef0ba2d07e43a090ab4481ef7d674, type: 2}
+    colorTile: {fileID: 0}
+    moveCost: 0
+    spawnRate: 0
+    type: 3
+    goldCost: 0
+    ironCost: 0
+    woodCost: 0
+    foodCost: 0
+    stoneCost: 100
+    buildingName: Wall
+    buildingIcon: {fileID: 0}
+    buildingTiles: []
+  - tileName: Left and Right
+    tile: {fileID: 11400000, guid: 90731df7e3786404e9363c488634082d, type: 2}
+    colorTile: {fileID: 0}
+    moveCost: 0
+    spawnRate: 0
+    type: 3
+    goldCost: 0
+    ironCost: 0
+    woodCost: 0
+    foodCost: 0
+    stoneCost: 100
+    buildingName: Wall
+    buildingIcon: {fileID: 0}
+    buildingTiles: []
   humanPlayer: {fileID: 6436187971630852751, guid: 1b90f0f815ad44d409b3588c1b0e5fc3,
     type: 3}
   computerPlayer: {fileID: 7052101655152592447, guid: f99dc1639e5874e399af1f6a7a4dcd23,
     type: 3}
+  controlMenu: {fileID: 1108018779}
   mapGenerator: {fileID: 0}
   playerColors:
   - {r: 0, g: 0, b: 1, a: 1}

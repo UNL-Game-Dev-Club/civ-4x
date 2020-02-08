@@ -33,7 +33,8 @@ public class BuildMenu : MonoBehaviour {
 	int offset = 0;
 	int buildingCount;
 
-	bool buildMode;
+	public bool buildMode;
+    public bool wallMode;
 	GameTile currentBuilding;
 
     // Start is called before the first frame update
@@ -45,6 +46,14 @@ public class BuildMenu : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
+        if (wallMode && Input.GetMouseButtonDown(0)) {
+            Vector3Int selectedTilePos = Camera.main.GetComponent<CameraController>().selectedTilePos;
+
+            bool built = Game.gameVar.GetCurrentPlayer().GenerateWall(selectedTilePos.x, selectedTilePos.y, true);
+
+            return;
+        }
+
         if (buildMode && Input.GetMouseButtonDown(0)) {
         	Vector3Int selectedTilePos = Camera.main.GetComponent<CameraController>().selectedTilePos;
 
@@ -260,6 +269,12 @@ public class BuildMenu : MonoBehaviour {
     		return;
     	}
 
+        if (number + offset == 6) {
+            BuildWalls();
+
+            return;
+        }
+
     	currentBuilding = Game.gameVar.buildingTiles[number + offset];
     	Camera.main.GetComponent<CameraController>().moveSelector.SetActive(true);
 
@@ -287,5 +302,15 @@ public class BuildMenu : MonoBehaviour {
     	}
 
     	buildMode = true;
+        wallMode = false;
+    }
+
+    public void BuildWalls () {
+        for (int i = 0; i < 8; i++) {
+            Game.gameVar.movementSprites[i].gameObject.SetActive(false);
+        }
+
+        buildMode = false;
+        wallMode = true;
     }
 }

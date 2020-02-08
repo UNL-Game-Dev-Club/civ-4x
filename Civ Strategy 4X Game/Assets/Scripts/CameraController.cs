@@ -148,6 +148,7 @@ public class CameraController : MonoBehaviour {
 
         unitMenu.gameObject.SetActive(true);
         unitMenu.currentUnit = selectedUnit;
+        Game.gameVar.GetCurrentPlayer().lastSelectedUnit = selectedUnit;
         unitMenu.LoadUnitData();
     }
 

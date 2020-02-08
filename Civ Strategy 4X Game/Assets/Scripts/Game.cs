@@ -80,6 +80,8 @@ public static class Game {
     		gameVar.currentPlayer = 0;
     	}
 
+        //gameVar.controlMenu.SetActive(false);
+
     	StartPlayerTurn(gameVar.currentPlayer);
     }
 
@@ -95,7 +97,13 @@ public static class Game {
 
     	if (currentPlayer.isHuman) {
     		Camera.main.GetComponent<Rigidbody>().velocity = new Vector3(0, 0, 0);
-    		Camera.main.transform.position = currentPlayer.cameraPosition;
+    		
+            if (currentPlayer.lastSelectedUnit == null) {
+                Camera.main.transform.position = currentPlayer.cameraPosition;
+            }
+            else {
+                Camera.main.transform.position = new Vector3(currentPlayer.lastSelectedUnit.transform.position.x, currentPlayer.lastSelectedUnit.transform.position.y, -10);
+            }
     	}
     	else {
 

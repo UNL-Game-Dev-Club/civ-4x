@@ -67,6 +67,8 @@ public class UnitMenu : MonoBehaviour {
     		Camera.main.GetComponent<CameraController>().moveSelector.SetActive(false);
     	}
     	else {
+            buildMenu.buildMode = false;
+            buildMenu.wallMode = false;
     		buildMenu.gameObject.SetActive(false);
     		Camera.main.GetComponent<CameraController>().SelectUnit(currentUnit.gameObject);
     	}

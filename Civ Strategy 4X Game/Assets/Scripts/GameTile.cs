@@ -7,6 +7,8 @@ using UnityEngine.Tilemaps;
 
 public class GameTile {
 
+	public string tileName;
+
 	// The tile used by this GameTile
 	public Tile tile;
 

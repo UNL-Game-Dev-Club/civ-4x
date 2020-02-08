@@ -13,6 +13,7 @@ public class Player : MonoBehaviour {
 	public Color playerColor;
 	public Vector3 cameraPosition;
 	public Vector3Int startingPosition;
+    public MobileUnit lastSelectedUnit;
 
 	// Resource Variables
 	public int gold;
@@ -135,5 +136,64 @@ public class Player : MonoBehaviour {
     	}
 
     	return true;
+    }
+
+    public bool GenerateWall (int xPos, int yPos, bool costMatters) {
+        Tile previousTile = (Tile)Game.gameVar.terrainMap.GetTile(new Vector3Int(xPos, yPos, 1));
+
+        if (previousTile != null) {
+            return false;
+        }
+
+        if (costMatters && stone < 100) {
+            return false;
+        }
+
+        stone -= 100;
+
+        GameTile wallTile = GetWallTile(xPos, yPos);
+
+        Game.gameVar.terrainMap.SetTile(new Vector3Int(xPos, yPos, 1), wallTile.tile);
+
+        RefreshWall(xPos, yPos + 1);
+        RefreshWall(xPos, yPos - 1);
+        RefreshWall(xPos - 1, yPos);
+        RefreshWall(xPos + 1, yPos);
+
+        return true;
+    }
+
+    void RefreshWall (int xPos, int yPos) {
+        if (GetWallCode(xPos, yPos) == "0") {
+            return;
+        }
+
+        GameTile wallTile = GetWallTile(xPos, yPos);
+
+        Game.gameVar.terrainMap.SetTile(new Vector3Int(xPos, yPos, 1), wallTile.tile);
+    }
+
+    GameTile GetWallTile (int xPos, int yPos) {
+        string neighborCode = "";
+        neighborCode += GetWallCode(xPos, yPos + 1);
+        neighborCode += GetWallCode(xPos, yPos - 1);
+        neighborCode += GetWallCode(xPos - 1, yPos);
+        neighborCode += GetWallCode(xPos + 1, yPos);
+
+        int wallIndex = Game.gameVar.mapGenerator.neighborToInt[neighborCode];
+
+        return Game.gameVar.wallTiles[wallIndex];
+    }
+
+    string GetWallCode (int xPos, int yPos) {
+        Tile checkTile = (Tile)Game.gameVar.terrainMap.GetTile(new Vector3Int(xPos, yPos, 1));
+
+        for (int i = 0; i < Game.gameVar.wallTiles.Length; i++) {
+            if (Game.gameVar.wallTiles[i].tile == checkTile) {
+                return "1";
+            }
+        }
+
+        return "0";
     }
 }

@@ -13,10 +13,11 @@ public class MapGenerator : MonoBehaviour {
 
     public GameTile[] gameTiles;
 
-    public int[] movementCosts;
+    // public int[] movementCosts;
 
     public Dictionary<Vector2Int, int> directionToInt = new Dictionary<Vector2Int, int>();
     public Dictionary<int, Vector2Int> intToDirection = new Dictionary<int, Vector2Int>();
+    public Dictionary<string, int> neighborToInt = new Dictionary<string, int>();
 
     // Start is called before the first frame update
     void Start () {
@@ -214,5 +215,26 @@ public class MapGenerator : MonoBehaviour {
         intToDirection.Add(5, new Vector2Int(-1, -1));
         intToDirection.Add(6, new Vector2Int(-1, 0));
         intToDirection.Add(7, new Vector2Int(-1, 1));
+
+        // For converting a tile neighbor code into an int
+        neighborToInt.Add("0000", 4);
+        neighborToInt.Add("1000", 10);
+        neighborToInt.Add("0100", 9);
+        neighborToInt.Add("0010", 12);
+        neighborToInt.Add("0001", 11);
+
+        neighborToInt.Add("0101", 0);
+        neighborToInt.Add("0110", 2);
+        neighborToInt.Add("1010", 8);
+        neighborToInt.Add("1001", 6);
+        neighborToInt.Add("1100", 13);
+        neighborToInt.Add("0011", 14);
+
+        neighborToInt.Add("1011", 7);
+        neighborToInt.Add("0111", 1);
+        neighborToInt.Add("1110", 5);
+        neighborToInt.Add("1101", 3);
+
+        neighborToInt.Add("1111", 4);
     }
 }
