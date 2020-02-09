@@ -98,6 +98,11 @@ public class UnitMenu : MonoBehaviour {
     }
 
     public void AttackButton () {
+        Vector3Int position = Game.gameVar.mainGrid.WorldToCell(currentUnit.transform.position);
+    }
+
+    public void HealButton ()
+    {
 
     }
 }

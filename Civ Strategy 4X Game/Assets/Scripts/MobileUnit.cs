@@ -21,6 +21,8 @@ public class MobileUnit : MonoBehaviour {
 	//   - 0 = Build
 	//   - 1 = Chop
 	//   - 2 = Attack
+    //   - 3 = Heal
+
 	public int[] buttons;
 
     // Values set during gameplay
@@ -82,6 +84,26 @@ public class MobileUnit : MonoBehaviour {
 
     	return false;
     }
+
+    // Check if the given tile is within the attack range of the unit
+    public bool IsWithinAttackRange(Vector3Int position)
+    {
+        Vector3Int cellPos = Game.gameVar.mainGrid.WorldToCell(transform.position);
+
+        for (int x = cellPos.x - 1; x <= cellPos.x + this.attackRange; x++)
+        {
+            for (int y = cellPos.y - 1; y <= cellPos.y + this.attackRange; y++)
+            {
+                if (position == new Vector3Int(x, y, 0) && (cellPos.x != x || cellPos.y != y))
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
 
     // Check if the given tile is walkable
     private bool IsWalkable (Vector3Int position) {
