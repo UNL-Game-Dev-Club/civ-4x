@@ -74,6 +74,9 @@ public static class Game {
     public static void NextPlayerTurn () {
     	EndPlayerTurn(gameVar.currentPlayer);
 
+        gameVar.cameraController.unitMenu.gameObject.SetActive(false);
+        gameVar.cameraController.buildMenu.gameObject.SetActive(false);
+
     	gameVar.currentPlayer++;
 
     	if (gameVar.currentPlayer >= gameVar.numberOfPlayers + gameVar.numberOfComputers) {
@@ -93,6 +96,8 @@ public static class Game {
     	foreach (MobileUnit unit in currentPlayer.ownedUnits) {
     		unit.canMove = true;
     		unit.remainingWalk = unit.walkDistance;
+
+            unit.OnTurnStart();
     	}
 
     	if (currentPlayer.isHuman) {
@@ -115,6 +120,7 @@ public static class Game {
     	currentPlayer.wood += currentPlayer.woodProfit;
     	currentPlayer.food += currentPlayer.foodProfit;
     	currentPlayer.stone += currentPlayer.stoneProfit;
+        currentPlayer.lava += currentPlayer.lavaProfit;
     }
 
     // End the turn of the player with the number "playerNumber"

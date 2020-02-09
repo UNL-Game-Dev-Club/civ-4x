@@ -58,6 +58,24 @@ public class CameraController : MonoBehaviour {
     		tileSelector.SetActive(true);
         	tileSelector.transform.position = Game.gameVar.groundMap.GetCellCenterWorld(cellPos);
             selectedTilePos = new Vector3Int(cellPos.x, cellPos.y, 0);
+
+            GameTile currentTile = Game.gameVar.GetGameTileAt(selectedTilePos.x, selectedTilePos.y);
+
+            // Adjust the layering of the tileSelector as needed
+            if (currentTile.flat) {
+                tileSelector.GetComponent<SpriteRenderer>().sortingOrder = 3;
+            }
+            else {
+                tileSelector.GetComponent<SpriteRenderer>().sortingOrder = 0;
+            }
+
+            // Adjust the size of the tileSelector as needed
+            if (currentTile.wide) {
+                tileSelector.transform.localScale = new Vector3(1.2f, 1.2f, 1.2f);
+            }
+            else {
+                tileSelector.transform.localScale = new Vector3(1, 1, 1);
+            }
     	}
     	else {
     		tileSelector.SetActive(false);
@@ -112,7 +130,7 @@ public class CameraController : MonoBehaviour {
             return;
         }
 
-        transform.position = new Vector3(unit.transform.position.x, unit.transform.position.y, -10);
+        // transform.position = new Vector3(unit.transform.position.x, unit.transform.position.y, -10);
 
         unitSelector.SetActive(true);
         unitSelector.transform.position = unit.transform.position;

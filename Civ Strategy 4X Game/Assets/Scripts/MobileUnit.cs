@@ -43,6 +43,13 @@ public class MobileUnit : MonoBehaviour {
         }
     }
 
+    // When a player starts their next turn, this function is called for each of that player's units
+    public void OnTurnStart () {
+        Vector3Int cellPos = Game.gameVar.mainGrid.WorldToCell(transform.position);
+
+        TakeTileDamage(cellPos.x, cellPos.y);
+    }
+
     // Move this unit to the tile at (posX, posY) if it is able to
     public bool MoveToTile (int posX, int posY) {
     	if (!canMove) {
@@ -62,6 +69,8 @@ public class MobileUnit : MonoBehaviour {
     	newPosition = Game.gameVar.groundMap.GetCellCenterWorld(new Vector3Int(posX, posY, 0));
 
     	remainingWalk -= GetMovementCost(new Vector3Int(posX, posY, 0));
+
+        TakeTileDamage(posX, posY);
 
     	if (remainingWalk < 1) {
     		canMove = false;
@@ -121,15 +130,28 @@ public class MobileUnit : MonoBehaviour {
         return true;
     }
 
-    // Returns the movement cost of the given tile
+    // Returns the movement cost of the tile at the given position
     public int GetMovementCost (Vector3Int position) {
-        if (Game.gameVar.mapGenerator.IsWaterTile(position.x, position.y)) {
-            return 0;
+        GameTile foundTile = Game.gameVar.GetGameTileAt(position.x, position.y);
+
+        if (foundTile != null) {
+            return foundTile.moveCost;
         }
 
-        Tile currentTile = (Tile)Game.gameVar.terrainMap.GetTile(new Vector3Int(position.x, position.y, 1));
-        int tileNumber = Game.gameVar.mapGenerator.GetTileNumber(currentTile);
+        return 0;
+    }
 
-        return Game.gameVar.mapGenerator.gameTiles[tileNumber].moveCost;
+    // Deals the given amount of damage to this unit
+    public void TakeDamage (int amount) {
+        healthPoints -= amount;
+    }
+
+    // Checks if the tile at the given coordinates is dangerous, and deals damage to this unit accordingly
+    void TakeTileDamage (int xPos, int yPos) {
+        Tile tempTile = (Tile)Game.gameVar.terrainMap.GetTile(new Vector3Int(xPos, yPos, 1));
+
+        int damageAmount = Game.gameVar.GetTileDamage(tempTile);
+
+        TakeDamage(damageAmount);
     }
 }

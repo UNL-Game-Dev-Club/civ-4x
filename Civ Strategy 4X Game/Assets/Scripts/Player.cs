@@ -21,12 +21,14 @@ public class Player : MonoBehaviour {
 	public int wood;
 	public int food;
 	public int stone;
+    public int lava;
 
 	public int goldProfit;
 	public int ironProfit;
 	public int woodProfit;
 	public int foodProfit;
 	public int stoneProfit;
+    public int lavaProfit;
 
 	// Objects defined during gameplay
 	public List<MobileUnit> ownedUnits = new List<MobileUnit>();
@@ -80,6 +82,9 @@ public class Player : MonoBehaviour {
     		if (building.stoneCost > stone) {
     			return false;
     		}
+            if (building.lavaCost > lava) {
+                return false;
+            }
 
     		bool canBuild = false;
 
@@ -108,6 +113,7 @@ public class Player : MonoBehaviour {
     	wood -= building.woodCost;
     	food -= building.foodCost;
     	stone -= building.stoneCost;
+        lava -= building.lavaCost;
 
     	// Adjust per-turn profits
     	switch (building.buildingName) {
@@ -133,63 +139,94 @@ public class Player : MonoBehaviour {
     		case "Lumber Yard":
     			woodProfit += 100;
     		break;
+
+            case "Lava Mine":
+                lavaProfit += 10;
+            break;
     	}
 
     	return true;
     }
 
-    public bool GenerateWall (int xPos, int yPos, bool costMatters) {
+    // Generate a wall or other interconnecting structure at the given coordinates
+    // Returns true or false depending on if the structure is successfully built or not
+    public bool GenerateWall (int xPos, int yPos, bool costMatters, GameTile[] tiles) {
         Tile previousTile = (Tile)Game.gameVar.terrainMap.GetTile(new Vector3Int(xPos, yPos, 1));
 
         if (previousTile != null) {
             return false;
         }
 
-        if (costMatters && stone < 100) {
-            return false;
+        GameTile wallTile = GetDirectionalTile(xPos, yPos, tiles);
+
+        if (costMatters) {
+            if (wallTile.goldCost > gold) {
+    			return false;
+    		}
+    		if (wallTile.ironCost > iron) {
+    			return false;
+    		}
+    		if (wallTile.woodCost > wood) {
+    			return false;
+    		}
+    		if (wallTile.foodCost > food) {
+    			return false;
+    		}
+    		if (wallTile.stoneCost > stone) {
+    			return false;
+    		}
+            if (wallTile.lavaCost > lava) {
+                return false;
+            }
         }
 
-        stone -= 100;
-
-        GameTile wallTile = GetWallTile(xPos, yPos);
+        gold -= wallTile.goldCost;
+    	iron -= wallTile.ironCost;
+    	wood -= wallTile.woodCost;
+    	food -= wallTile.foodCost;
+    	stone -= wallTile.stoneCost;
+        lava -= wallTile.lavaCost;
 
         Game.gameVar.terrainMap.SetTile(new Vector3Int(xPos, yPos, 1), wallTile.tile);
 
-        RefreshWall(xPos, yPos + 1);
-        RefreshWall(xPos, yPos - 1);
-        RefreshWall(xPos - 1, yPos);
-        RefreshWall(xPos + 1, yPos);
+        RefreshTile(xPos, yPos + 1, tiles);
+        RefreshTile(xPos, yPos - 1, tiles);
+        RefreshTile(xPos - 1, yPos, tiles);
+        RefreshTile(xPos + 1, yPos, tiles);
 
         return true;
     }
 
-    void RefreshWall (int xPos, int yPos) {
-        if (GetWallCode(xPos, yPos) == "0") {
+    // Refreshes an interconnecting structure
+    void RefreshTile (int xPos, int yPos, GameTile[] tiles) {
+        if (GetNeighborCode(xPos, yPos, tiles) == "0") {
             return;
         }
 
-        GameTile wallTile = GetWallTile(xPos, yPos);
+        GameTile wallTile = GetDirectionalTile(xPos, yPos, tiles);
 
         Game.gameVar.terrainMap.SetTile(new Vector3Int(xPos, yPos, 1), wallTile.tile);
     }
 
-    GameTile GetWallTile (int xPos, int yPos) {
+    // Returns the tile that should be placed based on the surrounding tiles
+    GameTile GetDirectionalTile (int xPos, int yPos, GameTile[] tiles) {
         string neighborCode = "";
-        neighborCode += GetWallCode(xPos, yPos + 1);
-        neighborCode += GetWallCode(xPos, yPos - 1);
-        neighborCode += GetWallCode(xPos - 1, yPos);
-        neighborCode += GetWallCode(xPos + 1, yPos);
+        neighborCode += GetNeighborCode(xPos, yPos + 1, tiles);
+        neighborCode += GetNeighborCode(xPos, yPos - 1, tiles);
+        neighborCode += GetNeighborCode(xPos - 1, yPos, tiles);
+        neighborCode += GetNeighborCode(xPos + 1, yPos, tiles);
 
-        int wallIndex = Game.gameVar.mapGenerator.neighborToInt[neighborCode];
+        int tileIndex = Game.gameVar.mapGenerator.neighborToInt[neighborCode];
 
-        return Game.gameVar.wallTiles[wallIndex];
+        return tiles[tileIndex];
     }
 
-    string GetWallCode (int xPos, int yPos) {
+    // Returns a "0" or "1" depending on whether or not a tile in the given list of tiles was found at the given coordinates
+    string GetNeighborCode (int xPos, int yPos, GameTile[] tiles) {
         Tile checkTile = (Tile)Game.gameVar.terrainMap.GetTile(new Vector3Int(xPos, yPos, 1));
 
-        for (int i = 0; i < Game.gameVar.wallTiles.Length; i++) {
-            if (Game.gameVar.wallTiles[i].tile == checkTile) {
+        for (int i = 0; i < tiles.Length; i++) {
+            if (tiles[i].tile == checkTile) {
                 return "1";
             }
         }
