@@ -21,7 +21,13 @@ public class GameTile {
 	// The higher the spawnRate, the more commonly this GameTile will appear in a randomly generated map
 	public int spawnRate;
 
+	public int damage;
+
 	public Game.TileType type;
+
+	public bool tiledBuilding;
+	public bool flat;
+	public bool wide;
 
 	// Build costs for this tile. These values only matter for building tiles
 	public int goldCost;
@@ -29,6 +35,7 @@ public class GameTile {
 	public int woodCost;
 	public int foodCost;
 	public int stoneCost;
+	public int lavaCost;
 
 	// If this tile is a building, this name is displayed in the build menu
 	public string buildingName;
@@ -38,6 +45,8 @@ public class GameTile {
 
 	// These are the only tiles that this building can be built on
 	public Tile[] buildingTiles;
+
+	public GameTile[] tileSet;
 
     GameTile () {
     	

@@ -20,6 +20,7 @@ public class UnitMenu : MonoBehaviour {
 	public Text rangeText;
 
 	public GameObject[] buttons;
+    public int[] buttonCosts;
 
     // Start is called before the first frame update
     void Start () {
@@ -50,6 +51,13 @@ public class UnitMenu : MonoBehaviour {
     	for (int i = 0; i < currentUnit.buttons.Length; i++) {
     		buttons[currentUnit.buttons[i]].SetActive(true);
     		buttons[currentUnit.buttons[i]].GetComponent<RectTransform>().anchoredPosition = new Vector3(10 + (65 * i), 10, 0);
+
+            if (buttonCosts[currentUnit.buttons[i]] > currentUnit.remainingWalk) {
+                buttons[currentUnit.buttons[i]].GetComponent<Button>().interactable = false;
+            }
+            else {
+                buttons[currentUnit.buttons[i]].GetComponent<Button>().interactable = true;
+            }
     	}
     }
 
@@ -98,6 +106,6 @@ public class UnitMenu : MonoBehaviour {
     }
 
     public void AttackButton () {
-
+        
     }
 }

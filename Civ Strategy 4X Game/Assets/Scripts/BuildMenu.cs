@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Tilemaps;
+using UnityEngine.EventSystems;
 
 public class BuildMenu : MonoBehaviour {
 
@@ -20,6 +21,8 @@ public class BuildMenu : MonoBehaviour {
 	public RawImage[] icon2;
 	public RawImage[] icon3;
 
+	public Button[] buttons = new Button[3];
+
 	public Sprite selectorIcon;
 
 	public Sprite goldIcon;
@@ -27,6 +30,7 @@ public class BuildMenu : MonoBehaviour {
 	public Sprite woodIcon;
 	public Sprite foodIcon;
 	public Sprite stoneIcon;
+    public Sprite lavaIcon;
 	
 	public MobileUnit currentUnit;
 
@@ -46,10 +50,12 @@ public class BuildMenu : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
-        if (wallMode && Input.GetMouseButtonDown(0)) {
-            Vector3Int selectedTilePos = Camera.main.GetComponent<CameraController>().selectedTilePos;
+    	if (EventSystem.current.IsPointerOverGameObject()) {
+    		return;
+    	}
 
-            bool built = Game.gameVar.GetCurrentPlayer().GenerateWall(selectedTilePos.x, selectedTilePos.y, true);
+        if (wallMode && Input.GetMouseButtonDown(0)) {
+            GenerateWall();
 
             return;
         }
@@ -89,79 +95,58 @@ public class BuildMenu : MonoBehaviour {
     				images[i].texture = building.tile.sprite.texture;
     			}
 
+    			buttons[i].interactable = true;
+
     			int costIndex = 0;
     			HideIcons(i);
 
-    			// Display gold cost
-    			if (building.goldCost > 0) {
-    				SetIcon(i, costIndex, goldIcon);
+   				if (DisplayCost(building.goldCost, Game.gameVar.GetCurrentPlayer().gold, i, costIndex, goldIcon)) {
+   					costIndex++;
+   				}
 
-    				Color tempColor = new Color(0, 0, 0, 1);
-    				if (building.goldCost > Game.gameVar.GetCurrentPlayer().gold) {
-    					tempColor = new Color(1, 0, 0, 1);
-    				}
+   				if (DisplayCost(building.ironCost, Game.gameVar.GetCurrentPlayer().iron, i, costIndex, ironIcon)) {
+   					costIndex++;
+   				}
 
-    				SetText(i, costIndex, building.goldCost + "", tempColor);
-    				costIndex++;
-    			}
+   				if (DisplayCost(building.woodCost, Game.gameVar.GetCurrentPlayer().wood, i, costIndex, woodIcon)) {
+   					costIndex++;
+   				}
 
-    			// Display iron cost
-    			if (building.ironCost > 0) {
-    				SetIcon(i, costIndex, ironIcon);
+   				if (DisplayCost(building.foodCost, Game.gameVar.GetCurrentPlayer().food, i, costIndex, foodIcon)) {
+   					costIndex++;
+   				}
 
-    				Color tempColor = new Color(0, 0, 0, 1);
-    				if (building.ironCost > Game.gameVar.GetCurrentPlayer().iron) {
-    					tempColor = new Color(1, 0, 0, 1);
-    				}
+   				if (DisplayCost(building.stoneCost, Game.gameVar.GetCurrentPlayer().stone, i, costIndex, stoneIcon)) {
+   					costIndex++;
+   				}
 
-    				SetText(i, costIndex, building.ironCost + "", tempColor);
-    				costIndex++;
-    			}
-
-    			// Display wood cost
-    			if (building.woodCost > 0) {
-    				SetIcon(i, costIndex, woodIcon);
-
-    				Color tempColor = new Color(0, 0, 0, 1);
-    				if (building.woodCost > Game.gameVar.GetCurrentPlayer().wood) {
-    					tempColor = new Color(1, 0, 0, 1);
-    				}
-
-    				SetText(i, costIndex, building.woodCost + "", tempColor);
-    				costIndex++;
-    			}
-
-    			// Display food cost
-    			if (building.foodCost > 0 && costIndex < 3) {
-    				SetIcon(i, costIndex, foodIcon);
-
-    				Color tempColor = new Color(0, 0, 0, 1);
-    				if (building.foodCost > Game.gameVar.GetCurrentPlayer().food) {
-    					tempColor = new Color(1, 0, 0, 1);
-    				}
-
-    				SetText(i, costIndex, building.foodCost + "", tempColor);
-    				costIndex++;
-    			}
-
-    			// Display stone cost
-    			if (building.stoneCost > 0 && costIndex < 3) {
-    				SetIcon(i, costIndex, stoneIcon);
-
-    				Color tempColor = new Color(0, 0, 0, 1);
-    				if (building.stoneCost > Game.gameVar.GetCurrentPlayer().stone) {
-    					tempColor = new Color(1, 0, 0, 1);
-    				}
-
-    				SetText(i, costIndex, building.stoneCost + "", tempColor);
-    				costIndex++;
-    			}
-
+   				if (DisplayCost(building.lavaCost, Game.gameVar.GetCurrentPlayer().lava, i, costIndex, lavaIcon)) {
+   					costIndex++;
+   				}
     		}
     		else {
     			buildingNames[i].transform.parent.gameObject.SetActive(false);
     		}
     	}
+    }
+
+    // Display the cost of a particular resource to build a particular building in the build menu
+    bool DisplayCost (int cost, int balance, int index, int costIndex, Sprite icon) {
+    	if (cost > 0 && costIndex < 3) {
+            SetIcon(index, costIndex, icon);
+
+            Color tempColor = new Color(0, 0, 0, 1);
+            if (cost > balance) {
+                tempColor = new Color(1, 0, 0, 1);
+                buttons[index].interactable = false;
+            }
+
+            SetText(index, costIndex, cost + "", tempColor);
+            // costIndex++;
+            return true;
+        }
+
+        return false;
     }
 
     // Change the offset of the build menu by the specified amount
@@ -269,8 +254,8 @@ public class BuildMenu : MonoBehaviour {
     		return;
     	}
 
-        if (number + offset == 6) {
-            BuildWalls();
+        if (Game.gameVar.buildingTiles[number + offset].tiledBuilding) {
+            BuildWalls(Game.gameVar.buildingTiles[number + offset]);
 
             return;
         }
@@ -305,12 +290,29 @@ public class BuildMenu : MonoBehaviour {
         wallMode = false;
     }
 
-    public void BuildWalls () {
+    /**
+     * Enter "wall building mode", which is similar to "build mode" except it handles the automatic connecting of
+     * tiles that can connect to other tiles. It also allows the player to build as many of the building in a row
+     * as they have enough resources for.
+     *
+     * Use this for structures that connect to themselves, such as walls, roads, and lava moats
+     */
+    public void BuildWalls (GameTile building) {
         for (int i = 0; i < 8; i++) {
             Game.gameVar.movementSprites[i].gameObject.SetActive(false);
         }
 
+        currentBuilding = building;
+
         buildMode = false;
         wallMode = true;
+    }
+
+    // Generate a new chunk of wall belonging to the current player
+    void GenerateWall () {
+        Vector3Int selectedTilePos = Camera.main.GetComponent<CameraController>().selectedTilePos;
+        GameTile[] tiles = currentBuilding.tileSet;
+
+        bool built = Game.gameVar.GetCurrentPlayer().GenerateWall(selectedTilePos.x, selectedTilePos.y, true, tiles);
     }
 }
