@@ -101,7 +101,7 @@ MonoBehaviour:
   attackPower: 1
   attackRange: 1
   walkDistance: 2
-  buttons: 0000000001000000
+  buttons: 000000000100000003000000
   teamNumber: 0
   canMove: 0
   remainingWalk: 0

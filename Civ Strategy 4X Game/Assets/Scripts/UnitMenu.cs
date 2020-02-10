@@ -28,8 +28,9 @@ public class UnitMenu : MonoBehaviour {
     }
 
     // Update is called once per frame
+    // Change this to after 
     void Update () {
-    	
+
     }
 
     // Display the stats of the currentUnit
@@ -105,12 +106,19 @@ public class UnitMenu : MonoBehaviour {
     	}
     }
 
-    public void AttackButton () {
-        Vector3Int position = Game.gameVar.mainGrid.WorldToCell(currentUnit.transform.position);
+    public void AttackButton ()
+    {
+
     }
 
     public void HealButton ()
     {
-
+        if (Game.gameVar.GetCurrentPlayer().food < 25 || currentUnit.remainingWalk == 0)
+        {
+            return;
+        }
+        Game.gameVar.GetCurrentPlayer().food -= 25;
+        currentUnit.healthPoints += 10;
+        currentUnit.remainingWalk = 0;
     }
 }

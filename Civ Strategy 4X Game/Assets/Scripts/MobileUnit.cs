@@ -15,7 +15,7 @@ public class MobileUnit : MonoBehaviour {
     // Variables for other stats
     public int attackPower;
     public int attackRange;
-	public int walkDistance;
+    public int walkDistance;
 
 	// Action buttons that this unit can use
 	//   - 0 = Build
@@ -29,6 +29,7 @@ public class MobileUnit : MonoBehaviour {
 	public int teamNumber;
 	public bool canMove;
 	public int remainingWalk;
+    public SpriteRenderer colorSprite;
 
 	public Vector3 newPosition;
 
@@ -99,9 +100,9 @@ public class MobileUnit : MonoBehaviour {
     {
         Vector3Int cellPos = Game.gameVar.mainGrid.WorldToCell(transform.position);
 
-        for (int x = cellPos.x - 1; x <= cellPos.x + this.attackRange; x++)
+        for (int x = cellPos.x - this.attackRange; x <= cellPos.x + this.attackRange; x++)
         {
-            for (int y = cellPos.y - 1; y <= cellPos.y + this.attackRange; y++)
+            for (int y = cellPos.y - this.attackRange; y <= cellPos.y + this.attackRange; y++)
             {
                 if (position == new Vector3Int(x, y, 0) && (cellPos.x != x || cellPos.y != y))
                 {

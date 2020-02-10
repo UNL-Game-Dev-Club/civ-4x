@@ -53,7 +53,14 @@ public class Player : MonoBehaviour {
     	MobileUnit newUnit = newObject.GetComponent<MobileUnit>();
 
     	newObject.transform.position = Game.gameVar.groundMap.GetCellCenterWorld(new Vector3Int(posX, posY, 0));
-    	newObject.GetComponent<SpriteRenderer>().color = playerColor;
+        if (newUnit.colorSprite == null)
+        {
+            newObject.GetComponent<SpriteRenderer>().color = playerColor;
+        }
+        else
+        {
+            newUnit.colorSprite.color = playerColor;
+        }
 
     	newUnit.newPosition = newObject.transform.position;
     	newUnit.teamNumber = playerNumber;
