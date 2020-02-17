@@ -15,6 +15,7 @@ public class MobileUnit : MonoBehaviour {
     // Variables for other stats
     public int attackPower;
     public int attackRange;
+    public bool attackMode = false;
     public int walkDistance;
 
 	// Action buttons that this unit can use
@@ -96,15 +97,17 @@ public class MobileUnit : MonoBehaviour {
     }
 
     // Check if the given tile is within the attack range of the unit
-    public bool IsWithinAttackRange(Vector3Int position)
+    public bool IsWithinAttackRange(MobileUnit unit)
     {
         Vector3Int cellPos = Game.gameVar.mainGrid.WorldToCell(transform.position);
+        Vector3Int enemyCellPos = Game.gameVar.mainGrid.WorldToCell(unit.transform.position);
+        enemyCellPos = new Vector3Int(enemyCellPos.x, enemyCellPos.y, 0);
 
         for (int x = cellPos.x - this.attackRange; x <= cellPos.x + this.attackRange; x++)
         {
             for (int y = cellPos.y - this.attackRange; y <= cellPos.y + this.attackRange; y++)
             {
-                if (position == new Vector3Int(x, y, 0) && (cellPos.x != x || cellPos.y != y))
+                if (enemyCellPos == new Vector3Int(x, y, 0) && (cellPos.x != x || cellPos.y != y))
                 {
                     return true;
                 }
@@ -145,6 +148,10 @@ public class MobileUnit : MonoBehaviour {
     // Deals the given amount of damage to this unit
     public void TakeDamage (int amount) {
         healthPoints -= amount;
+        if (healthPoints <= 0)
+        {
+            Destroy(gameObject);
+        }
     }
 
     // Checks if the tile at the given coordinates is dangerous, and deals damage to this unit accordingly

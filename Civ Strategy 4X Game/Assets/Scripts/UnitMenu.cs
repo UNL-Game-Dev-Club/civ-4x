@@ -30,7 +30,7 @@ public class UnitMenu : MonoBehaviour {
     // Update is called once per frame
     // Change this to after 
     void Update () {
-
+        LoadUnitData();
     }
 
     // Display the stats of the currentUnit
@@ -106,10 +106,13 @@ public class UnitMenu : MonoBehaviour {
     	}
     }
 
-    public void AttackButton ()
+    /*public void AttackButton ()
     {
-
-    }
+        if (currentUnit.remainingWalk > 0)
+        {
+            currentUnit.attackMode = true;
+        }
+    }*/ 
 
     public void HealButton ()
     {

@@ -55,7 +55,7 @@ public class GameVar : MonoBehaviour {
         Game.gameVar = GetComponent<GameVar>();
         mapGenerator = GetComponent<MapGenerator>();
 
-        Game.StartNewGame(50, 50);
+        Game.StartNewGame(20, 20);
     }
 
     // Update is called once per frame

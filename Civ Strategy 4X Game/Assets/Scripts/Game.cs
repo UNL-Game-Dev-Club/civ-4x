@@ -56,8 +56,12 @@ public static class Game {
     		newPlayer.playerColor = gameVar.playerColors[i];
 
     		newPlayer.GenerateUnit(gameVar.units[1], newPlayer.startingPosition.x, newPlayer.startingPosition.y);
+            newPlayer.GenerateUnit(gameVar.units[2], newPlayer.startingPosition.x+1, newPlayer.startingPosition.y);
 
-    		newPlayer.GenerateBuilding(gameVar.buildingTiles[0], newPlayer.startingPosition.x, newPlayer.startingPosition.y, false);
+            newPlayer.lastSelectedUnit = newPlayer.ownedUnits[0];
+
+
+            newPlayer.GenerateBuilding(gameVar.buildingTiles[0], newPlayer.startingPosition.x, newPlayer.startingPosition.y, false);
 
     		// Starting resources for each player
     		newPlayer.gold = 1000;
@@ -76,8 +80,13 @@ public static class Game {
 
         gameVar.cameraController.unitMenu.gameObject.SetActive(false);
         gameVar.cameraController.buildMenu.gameObject.SetActive(false);
+        gameVar.cameraController.targetedUnitMenu.gameObject.SetActive(false);
+        gameVar.cameraController.targetSelector.SetActive(false);
+        gameVar.cameraController.unitSelector.SetActive(false);
+        gameVar.cameraController.tileSelector.SetActive(false);
+        gameVar.cameraController.moveSelector.SetActive(false);
 
-    	gameVar.currentPlayer++;
+        gameVar.currentPlayer++;
 
     	if (gameVar.currentPlayer >= gameVar.numberOfPlayers + gameVar.numberOfComputers) {
     		gameVar.currentPlayer = 0;

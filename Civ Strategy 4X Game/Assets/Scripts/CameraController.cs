@@ -8,13 +8,16 @@ public class CameraController : MonoBehaviour {
 	public float cameraSpeed;
 	public GameObject tileSelector;
     public GameObject unitSelector;
+    public GameObject targetSelector;
     public GameObject moveSelector;
 
     public Vector3Int selectedTilePos;
     public MobileUnit selectedUnit;
+    public MobileUnit targetedUnit;
 
     public UnitMenu unitMenu;
     public BuildMenu buildMenu;
+    public TargetedUnitMenu targetedUnitMenu;
 
 	Rigidbody rb;
 
@@ -83,14 +86,17 @@ public class CameraController : MonoBehaviour {
     }
 
     // Called when the left mouse button is first clicked
-    void OnLeftClick () {
-    	if (EventSystem.current.IsPointerOverGameObject()) {
-    		return;
-    	}
+    void OnLeftClick()
+    {
+        if (EventSystem.current.IsPointerOverGameObject())
+        {
+            return;
+        }
 
-    	if (buildMenu.gameObject.activeSelf) {
-    		return;
-    	}
+        if (buildMenu.gameObject.activeSelf)
+        {
+            return;
+        }
 
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit2D hit;
@@ -99,10 +105,12 @@ public class CameraController : MonoBehaviour {
         hit = Physics2D.GetRayIntersection(ray);
 
         // Handles selection of units
-        if (hit.collider != null) {
+        if (hit.collider != null)
+        {
             hitObject = hit.collider.gameObject;
 
-            if (hitObject.GetComponent<MobileUnit>() != null) {
+            if (hitObject.GetComponent<MobileUnit>() != null)
+            {
                 SelectUnit(hitObject);
 
                 return;
@@ -110,13 +118,17 @@ public class CameraController : MonoBehaviour {
         }
 
         // Handles movement of the selected unit
-        if (selectedUnit != null) {
-            if (selectedUnit.IsWithinOneTile(selectedTilePos) && selectedUnit.canMove) {
-                if (selectedUnit.MoveToTile(selectedTilePos.x, selectedTilePos.y)) {
+        if (selectedUnit != null)
+        {
+            if (selectedUnit.IsWithinOneTile(selectedTilePos) && selectedUnit.canMove)
+            {
+                if (selectedUnit.MoveToTile(selectedTilePos.x, selectedTilePos.y))
+                {
                     UnselectUnit();
                 }
             }
-            else {
+            else
+            {
                 UnselectUnit();
             }
 
@@ -127,47 +139,69 @@ public class CameraController : MonoBehaviour {
     // Set the given unit as the selected unit
     public void SelectUnit (GameObject unit) {
         if (unit.GetComponent<MobileUnit>().teamNumber != Game.gameVar.currentPlayer) {
-            return;
+           TargetUnit(unit);
         }
 
-        // transform.position = new Vector3(unit.transform.position.x, unit.transform.position.y, -10);
+        //transform.position = new Vector3(unit.transform.position.x, unit.transform.position.y, -10);
+        else
+        {
+            unitSelector.SetActive(true);
+            unitSelector.transform.position = unit.transform.position;
 
-        unitSelector.SetActive(true);
-        unitSelector.transform.position = unit.transform.position;
+            Vector3Int unitPos = Game.gameVar.mainGrid.WorldToCell(unit.transform.position);
 
-        Vector3Int unitPos = Game.gameVar.mainGrid.WorldToCell(unit.transform.position);
+            // Display the movement costs of the nearby walkable tiles
+            if (unit.GetComponent<MobileUnit>().canMove)
+            {
+                moveSelector.SetActive(true);
 
-        // Display the movement costs of the nearby walkable tiles
-        if (unit.GetComponent<MobileUnit>().canMove) {
-            moveSelector.SetActive(true);
+                for (int i = 0; i < 8; i++)
+                {
+                    Vector2Int direction = Game.gameVar.mapGenerator.intToDirection[i];
+                    int moveCost = unit.GetComponent<MobileUnit>().GetMovementCost(new Vector3Int(unitPos.x + direction.x, unitPos.y + direction.y, 1));
 
-            for (int i = 0; i < 8; i++) {
-            	Vector2Int direction = Game.gameVar.mapGenerator.intToDirection[i];
-            	int moveCost = unit.GetComponent<MobileUnit>().GetMovementCost(new Vector3Int(unitPos.x + direction.x, unitPos.y + direction.y, 1));
+                    if (moveCost > 0 && moveCost < 4)
+                    {
+                        Game.gameVar.movementSprites[i].gameObject.SetActive(true);
+                        Game.gameVar.movementSprites[i].sprite = Game.gameVar.numberSprites[moveCost];
 
-            	if (moveCost > 0 && moveCost < 4) {
-            		Game.gameVar.movementSprites[i].gameObject.SetActive(true);
-            		Game.gameVar.movementSprites[i].sprite = Game.gameVar.numberSprites[moveCost];
-
-            		if (moveCost > unit.GetComponent<MobileUnit>().remainingWalk) {
-            			Game.gameVar.movementSprites[i].color = new Color(1, 0, 0, 1);
-            		}
-            		else {
-            			Game.gameVar.movementSprites[i].color = new Color(1, 1, 1, 1);
-            		}
-            	}
-            	else {
-            		Game.gameVar.movementSprites[i].gameObject.SetActive(false);
-            	}
+                        if (moveCost > unit.GetComponent<MobileUnit>().remainingWalk)
+                        {
+                            Game.gameVar.movementSprites[i].color = new Color(1, 0, 0, 1);
+                        }
+                        else
+                        {
+                            Game.gameVar.movementSprites[i].color = new Color(1, 1, 1, 1);
+                        }
+                    }
+                    else
+                    {
+                        Game.gameVar.movementSprites[i].gameObject.SetActive(false);
+                    }
+                }
             }
+
+            selectedUnit = unit.GetComponent<MobileUnit>();
+
+            unitMenu.gameObject.SetActive(true);
+            unitMenu.currentUnit = selectedUnit;
+            Game.gameVar.GetCurrentPlayer().lastSelectedUnit = selectedUnit;
+            unitMenu.LoadUnitData();
         }
+       
+    }
 
-        selectedUnit = unit.GetComponent<MobileUnit>();
+    public void TargetUnit(GameObject unit)
+    {
 
-        unitMenu.gameObject.SetActive(true);
-        unitMenu.currentUnit = selectedUnit;
-        Game.gameVar.GetCurrentPlayer().lastSelectedUnit = selectedUnit;
-        unitMenu.LoadUnitData();
+        targetSelector.SetActive(true);
+        targetSelector.transform.position = unit.transform.position;
+
+        targetedUnit = unit.GetComponent<MobileUnit>();
+
+        targetedUnitMenu.gameObject.SetActive(true);
+        targetedUnitMenu.targetedUnit = targetedUnit;
+        targetedUnitMenu.LoadUnitData();
     }
 
     // Unselect the currently selected unit
@@ -177,5 +211,6 @@ public class CameraController : MonoBehaviour {
         moveSelector.SetActive(false);
         unitMenu.gameObject.SetActive(false);
         buildMenu.gameObject.SetActive(false);
+        targetedUnitMenu.gameObject.SetActive(false);
     }
 }
