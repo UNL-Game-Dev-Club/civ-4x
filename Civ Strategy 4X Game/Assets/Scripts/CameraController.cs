@@ -20,6 +20,7 @@ public class CameraController : MonoBehaviour {
     public TargetedUnitMenu targetedUnitMenu;
 
 	Rigidbody rb;
+    Vector3 lastMousePos;
 
     // Start is called before the first frame update
     void Start () {
@@ -46,7 +47,6 @@ public class CameraController : MonoBehaviour {
             return;
         }
 
-    	// Adjust the velocity of the camera based on user input
     	rb.velocity = new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), 0) * cameraSpeed;
 
     	MoveTileSelector();
@@ -86,15 +86,8 @@ public class CameraController : MonoBehaviour {
     }
 
     // Called when the left mouse button is first clicked
-    void OnLeftClick()
-    {
-        if (EventSystem.current.IsPointerOverGameObject())
-        {
-            return;
-        }
-
-        if (buildMenu.gameObject.activeSelf)
-        {
+    void OnLeftClick () {
+        if (EventSystem.current.IsPointerOverGameObject()) {
             return;
         }
 
@@ -104,31 +97,40 @@ public class CameraController : MonoBehaviour {
 
         hit = Physics2D.GetRayIntersection(ray);
 
+        if (buildMenu.gameObject.activeSelf) {
+            if (!selectedUnit.IsWithinOneTile(selectedTilePos)) {
+                buildMenu.GetComponent<BuildMenu>().CloseMenu();
+                UnselectUnit();
+            }
+
+            return;
+        }
+
         // Handles selection of units
-        if (hit.collider != null)
-        {
+        if (hit.collider != null) {
             hitObject = hit.collider.gameObject;
 
-            if (hitObject.GetComponent<MobileUnit>() != null)
-            {
+            if (hitObject.GetComponent<MobileUnit>() != null) {
                 SelectUnit(hitObject);
 
                 return;
             }
+            else {
+                targetedUnitMenu.gameObject.SetActive(false);
+            }
+        }
+        else {
+            targetedUnitMenu.CancelAttackButton();
         }
 
         // Handles movement of the selected unit
-        if (selectedUnit != null)
-        {
-            if (selectedUnit.IsWithinOneTile(selectedTilePos) && selectedUnit.canMove)
-            {
-                if (selectedUnit.MoveToTile(selectedTilePos.x, selectedTilePos.y))
-                {
+        if (selectedUnit != null) {
+            if (selectedUnit.IsWithinOneTile(selectedTilePos) && selectedUnit.canMove) {
+                if (selectedUnit.MoveToTile(selectedTilePos.x, selectedTilePos.y)) {
                     UnselectUnit();
                 }
             }
-            else
-            {
+            else {
                 UnselectUnit();
             }
 
@@ -143,57 +145,58 @@ public class CameraController : MonoBehaviour {
         }
 
         //transform.position = new Vector3(unit.transform.position.x, unit.transform.position.y, -10);
-        else
-        {
+        else {
             unitSelector.SetActive(true);
             unitSelector.transform.position = unit.transform.position;
 
             Vector3Int unitPos = Game.gameVar.mainGrid.WorldToCell(unit.transform.position);
 
             // Display the movement costs of the nearby walkable tiles
-            if (unit.GetComponent<MobileUnit>().canMove)
-            {
+            if (unit.GetComponent<MobileUnit>().canMove) {
                 moveSelector.SetActive(true);
 
-                for (int i = 0; i < 8; i++)
-                {
+                for (int i = 0; i < 8; i++) {
                     Vector2Int direction = Game.gameVar.mapGenerator.intToDirection[i];
                     int moveCost = unit.GetComponent<MobileUnit>().GetMovementCost(new Vector3Int(unitPos.x + direction.x, unitPos.y + direction.y, 1));
 
-                    if (moveCost > 0 && moveCost < 4)
-                    {
+                    if (moveCost > 0 && moveCost < 4) {
                         Game.gameVar.movementSprites[i].gameObject.SetActive(true);
                         Game.gameVar.movementSprites[i].sprite = Game.gameVar.numberSprites[moveCost];
 
-                        if (moveCost > unit.GetComponent<MobileUnit>().remainingWalk)
-                        {
+                        if (moveCost > unit.GetComponent<MobileUnit>().remainingWalk) {
                             Game.gameVar.movementSprites[i].color = new Color(1, 0, 0, 1);
                         }
-                        else
-                        {
+                        else {
                             Game.gameVar.movementSprites[i].color = new Color(1, 1, 1, 1);
                         }
                     }
-                    else
-                    {
+                    else {
                         Game.gameVar.movementSprites[i].gameObject.SetActive(false);
                     }
                 }
             }
 
+            if (selectedUnit != null) {
+                selectedUnit.GetComponent<Collider2D>().enabled = true;
+            }
+
             selectedUnit = unit.GetComponent<MobileUnit>();
+            selectedUnit.GetComponent<Collider2D>().enabled = false;
 
             unitMenu.gameObject.SetActive(true);
             unitMenu.currentUnit = selectedUnit;
             Game.gameVar.GetCurrentPlayer().lastSelectedUnit = selectedUnit;
             unitMenu.LoadUnitData();
+
+            if (targetedUnitMenu.targetedUnit != null) {
+                targetedUnitMenu.selectedUnit = selectedUnit;
+                targetedUnitMenu.LoadUnitData();
+            }
         }
        
     }
 
-    public void TargetUnit(GameObject unit)
-    {
-
+    public void TargetUnit (GameObject unit) {
         targetSelector.SetActive(true);
         targetSelector.transform.position = unit.transform.position;
 
@@ -201,16 +204,21 @@ public class CameraController : MonoBehaviour {
 
         targetedUnitMenu.gameObject.SetActive(true);
         targetedUnitMenu.targetedUnit = targetedUnit;
+        targetedUnitMenu.selectedUnit = selectedUnit;
         targetedUnitMenu.LoadUnitData();
     }
 
     // Unselect the currently selected unit
     public void UnselectUnit () {
+        selectedUnit.GetComponent<Collider2D>().enabled = true;
+
         selectedUnit = null;
         unitSelector.SetActive(false);
         moveSelector.SetActive(false);
         unitMenu.gameObject.SetActive(false);
         buildMenu.gameObject.SetActive(false);
-        targetedUnitMenu.gameObject.SetActive(false);
+        
+        // targetedUnitMenu.gameObject.SetActive(false);
+        targetedUnitMenu.CancelAttackButton();
     }
 }

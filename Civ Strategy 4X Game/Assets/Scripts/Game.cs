@@ -64,11 +64,15 @@ public static class Game {
             newPlayer.GenerateBuilding(gameVar.buildingTiles[0], newPlayer.startingPosition.x, newPlayer.startingPosition.y, false);
 
     		// Starting resources for each player
-    		newPlayer.gold = 1000;
+    		newPlayer.gold = 975;
     		newPlayer.iron = 0;
     		newPlayer.wood = 0;
     		newPlayer.food = 100;
     		newPlayer.stone = 0;
+            newPlayer.lava = 0;
+
+            // Starting resource profits for each player (default is 0);
+            newPlayer.goldProfit = 25;
     	}
 
     	StartPlayerTurn(0);
@@ -80,8 +84,8 @@ public static class Game {
 
         gameVar.cameraController.unitMenu.gameObject.SetActive(false);
         gameVar.cameraController.buildMenu.gameObject.SetActive(false);
-        gameVar.cameraController.targetedUnitMenu.gameObject.SetActive(false);
-        gameVar.cameraController.targetSelector.SetActive(false);
+        gameVar.cameraController.targetedUnitMenu.CancelAttackButton();
+
         gameVar.cameraController.unitSelector.SetActive(false);
         gameVar.cameraController.tileSelector.SetActive(false);
         gameVar.cameraController.moveSelector.SetActive(false);

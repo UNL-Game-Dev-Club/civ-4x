@@ -100,11 +100,14 @@ MonoBehaviour:
   maxHealth: 100
   attackPower: 1
   attackRange: 1
+  attackMode: 0
   walkDistance: 2
-  buttons: 000000000100000003000000
+  buttons: 000000000100000002000000
+  attackFX: {fileID: 0}
   teamNumber: 0
   canMove: 0
   remainingWalk: 0
+  colorSprite: {fileID: 0}
   newPosition: {x: 0, y: 0, z: 0}
 --- !u!50 &7922831382229464219
 Rigidbody2D:

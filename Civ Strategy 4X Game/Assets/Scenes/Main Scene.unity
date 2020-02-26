@@ -489,6 +489,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetedUnit: {fileID: 0}
   selectedUnit: {fileID: 0}
+  targetSelector: {fileID: 1409778024}
   nameText: {fileID: 151394}
   healthBar: {fileID: 872310965}
   healthText: {fileID: 570849373}
@@ -8835,6 +8836,7 @@ MonoBehaviour:
       buildingIcon: {fileID: 21300000, guid: 900ad962ef0374e139922125bf9b56b5, type: 3}
       buildingTiles: []
       tileSet: []
+  vfx: []
   humanPlayer: {fileID: 6436187971630852751, guid: 1b90f0f815ad44d409b3588c1b0e5fc3,
     type: 3}
   computerPlayer: {fileID: 7052101655152592447, guid: f99dc1639e5874e399af1f6a7a4dcd23,

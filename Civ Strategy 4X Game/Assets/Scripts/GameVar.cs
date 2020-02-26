@@ -22,6 +22,8 @@ public class GameVar : MonoBehaviour {
     // public GameTile[] wallTiles;
     // public GameTile[] lavaTiles;
 
+    public GameObject[] vfx;
+
     public GameObject humanPlayer;
     public GameObject computerPlayer;
 

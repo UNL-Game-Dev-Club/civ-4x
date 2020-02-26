@@ -315,4 +315,13 @@ public class BuildMenu : MonoBehaviour {
 
         bool built = Game.gameVar.GetCurrentPlayer().GenerateWall(selectedTilePos.x, selectedTilePos.y, true, tiles);
     }
+
+    public void CloseMenu () {
+        foreach (SpriteRenderer sr in Game.gameVar.movementSprites) {
+            sr.gameObject.SetActive(false);
+        }
+
+        buildMode = false;
+        gameObject.SetActive(false);
+    }
 }

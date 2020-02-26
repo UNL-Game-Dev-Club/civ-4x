@@ -25,6 +25,7 @@ public class MobileUnit : MonoBehaviour {
     //   - 3 = Heal
 
 	public int[] buttons;
+    public GameObject attackFX;
 
     // Values set during gameplay
 	public int teamNumber;
@@ -148,10 +149,12 @@ public class MobileUnit : MonoBehaviour {
     // Deals the given amount of damage to this unit
     public void TakeDamage (int amount) {
         healthPoints -= amount;
-        if (healthPoints <= 0)
-        {
+
+        if (healthPoints <= 0) {
             Destroy(gameObject);
         }
+
+        transform.position += new Vector3(0, 0.75f, 0);
     }
 
     // Checks if the tile at the given coordinates is dangerous, and deals damage to this unit accordingly
@@ -160,6 +163,8 @@ public class MobileUnit : MonoBehaviour {
 
         int damageAmount = Game.gameVar.GetTileDamage(tempTile);
 
-        TakeDamage(damageAmount);
+        if (damageAmount > 0) {
+            TakeDamage(damageAmount);
+        }
     }
 }
